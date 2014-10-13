@@ -18,7 +18,7 @@ Depends on packages:
 
 # Installation
 
-*WARNING:* A mistake can lock you out of your router!  Be prepared in case
+**WARNING:** A mistake can lock you out of your router!  Be prepared in case
 that happens: Backup your configs; have a firmware image and tftp client
 ready just in case; temporarily enable luci/ssh access via the WAN port;
 enable admin access via wireless, etc.
@@ -54,7 +54,7 @@ Verify again the interfaces were set up correctly after reboot.
 
 ### Configure the VLAN in the luci menu "Network -> Switch"
 
-*WARNING:* Temporarily enable luci/ssh access via WAN and/or
+**WARNING:** Temporarily enable luci/ssh access via WAN and/or
 wireless, in case you lock yourself out via the LAN switch!
 
 Make sure "Enable VLAN functionality" is checked.
