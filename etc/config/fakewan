@@ -1,0 +1,36 @@
+config fakewan
+
+	# MAC address of your slave device, used for DHCP assignment
+	# to help prevent another device from grabbing the IP
+	option slave_mac 'xx:xx:xx:xx:xx:xx'
+
+	# Network namespace name
+	option netns 'fakewan'
+
+	# The slave device needs to be on its own VLAN
+	option slave_ifname 'eth0'
+	option slave_vlan '101'
+
+	# Virtual ethernet pair
+	option veth0 'fakewan0'
+	option veth1 'fakewan1'
+	option veth_netmask '255.255.255.0'
+	option veth0_ip '192.168.101.1'
+	option veth1_ip '192.168.101.2'
+
+	# If our WAN IP changes, we would like to force the slave
+	# device to renew DHCP immediately; unfortunately swconfig
+	# does not yet support powering off/on ports.
+	#
+	# As an alternative, if you happen to have 2 ports available
+	# on a SNMP managed switch such as the TP-LINK TL-SG2216, you
+	# can make the OpenWRT<->slave patch through the switch and
+	# power cycle the slave's port with SNMP.
+	#
+	#option switch_ip '192.168.0.254'
+	#option switch_snmp_community 'fakewan'
+	#option switch_port '3'
+
+	# How long to keep the port powered off (should be long enough
+	# for the slave to notice its link went down.)
+	#option switch_sleep '10'

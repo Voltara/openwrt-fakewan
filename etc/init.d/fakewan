@@ -1,0 +1,35 @@
+#!/bin/sh /etc/rc.common
+
+START=15
+USE_PROCD=1
+QUIET=""
+
+start_instance() {
+	local cfg="$1"
+
+	local slave_ifname slave_vlan veth0 veth1 netns
+
+	config_get slave_ifname "$cfg" slave_ifname
+	config_get slave_vlan "$cfg" slave_vlan
+	config_get veth0 "$cfg" veth0
+	config_get veth1 "$cfg" veth1
+	config_get netns "$cfg" netns
+
+	ip netns add "$netns"
+
+	vconfig add "$slave_ifname" "$slave_vlan"
+	ip link set "$slave_ifname.$slave_vlan" netns "$netns"
+
+	ip link add "$veth0" type veth peer name "$veth1"
+	ip link set "$veth1" netns "$netns"
+
+	ip netns exec "$netns" ifconfig "$veth1" "$veth1_ip" netmask "$veth_netmask" up
+	ip netns exec "$netns" ip route add default via "$veth0_ip"
+	ip netns exec "$netns" iptables -t nat -F POSTROUTING
+	ip netns exec "$netns" iptables -t nat -A POSTROUTING -o "$veth1" -j SNAT --to "$veth1_ip"
+}
+
+start_service() {
+	config_load fakewan
+	config_foreach start_instance fakewan
+}
