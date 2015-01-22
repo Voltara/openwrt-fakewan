@@ -42,7 +42,7 @@ setup_interface () {
 		no-dhcp-interface=$veth1
 	EOF
 
-	if [ -s "/var/run/dnsmasq-netns.pid" ]; then
+	if [ -s "/var/run/dnsmasq-$netns.pid" ]; then
 		kill `cat "/var/run/dnsmasq-$netns.pid"`
 		rm -f "/var/run/dnsmasq-$netns.pid"
 	fi
