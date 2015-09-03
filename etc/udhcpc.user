@@ -22,6 +22,7 @@ setup_interface () {
 	config_get switch_sleep "$cfg" switch_sleep
 
 	ip netns exec "$netns" ifconfig "$slave_ifname.$slave_vlan" "$router" netmask "${subnet:-255.255.255.0}" up
+	[ ! -d "/var/etc" ] && mkdir -p "/var/etc"
 	cat <<-EOF >"/var/etc/dnsmasq-$netns.conf"
 		# auto-generated config file from /etc/config/dhcp
 		pid-file=/var/run/dnsmasq-$netns.pid
