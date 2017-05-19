@@ -27,7 +27,7 @@ enable admin access via wireless, etc.
 
 	/etc/init.d/fakewan
 	/etc/config/fakewan
-	/etc/udhcpc.user
+	/etc/hotplug.d/iface/90-fakewan
 
 ### Configure /etc/config/fakewan
 

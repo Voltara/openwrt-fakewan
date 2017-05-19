@@ -20,7 +20,7 @@ start_instance() {
 
 	ip netns add "$netns"
 
-	vconfig add "$slave_ifname" "$slave_vlan"
+	ip link add link "$slave_ifname" name "$slave_ifname.$slave_vlan" type vlan id "$slave_vlan"
 	ip link set "$slave_ifname.$slave_vlan" netns "$netns"
 
 	ip link add "$veth0" type veth peer name "$veth1"

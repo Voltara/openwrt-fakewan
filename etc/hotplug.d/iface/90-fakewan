@@ -1,12 +1,17 @@
 #!/bin/sh
 
+/etc/init.d/fakewan enabled || exit 0
+[ "$INTERFACE" = "wan" ] || exit 0
+
 . /lib/functions.sh
+. /lib/functions/network.sh
 
 setup_interface () {
 	local cfg="$1"
 
 	local netns slave_mac slave_ifname slave_vlan dhcp_lease_time veth1 veth1_ip
 	local switch_ip switch_snmp_community switch_port switch_sleep
+	local ip router
 
 	config_get netns "$cfg" netns
 	config_get slave_mac "$cfg" slave_mac
@@ -20,6 +25,9 @@ setup_interface () {
 	config_get switch_snmp_community "$cfg" switch_snmp_community
 	config_get switch_port "$cfg" switch_port
 	config_get switch_sleep "$cfg" switch_sleep
+
+	network_get_ipaddr ip wan
+	network_get_gateway router wan
 
 	ip netns exec "$netns" ifconfig "$slave_ifname.$slave_vlan" "$router" netmask "${subnet:-255.255.255.0}" up
 	[ ! -d "/var/etc" ] && mkdir -p "/var/etc"
@@ -74,11 +82,11 @@ deconfig_interface() {
 	:
 }
 
-case "$1" in
-	deconfig)
+case "$ACTION" in
+	ifdown)
 		deconfig_interface
 	;;
-	renew|bound)
+	ifup)
 		config_load fakewan
 		config_foreach setup_interface fakewan
 	;;

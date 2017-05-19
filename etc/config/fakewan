@@ -11,6 +11,9 @@ config fakewan
 	option slave_ifname 'eth0'
 	option slave_vlan '101'
 
+	# Lease time for the slave device
+	option dhcp_lease_time '1h'
+
 	# Virtual ethernet pair
 	option veth0 'fakewan0'
 	option veth1 'fakewan1'
